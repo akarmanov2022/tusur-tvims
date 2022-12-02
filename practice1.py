@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 
 def plot_histogram(array: [], title: str, x_label: str, y_label: str, bins: int):
-    plt.hist(array, bins=bins)
+    plt.hist(array, bins)
     plt.title(title)
     plt.xlabel(x_label)
     plt.ylabel(y_label)
@@ -33,7 +33,7 @@ scope = max_value - min_value
 print('Размах: ', scope)
 
 # Нахождение количества групп
-number_of_groups = int(1 + 3.322 * np.log10(len(data)))
+number_of_groups = round(1 + 3.322 * np.log10(len(data)))
 print('Количество групп: ', number_of_groups)
 interval = scope / number_of_groups
 print('Ширина интервала: ', interval)
