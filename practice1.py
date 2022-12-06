@@ -33,7 +33,9 @@ scope = max_value - min_value
 print('Размах: ', scope)
 
 # Нахождение количества групп
-number_of_groups = round(1 + 3.322 * np.log10(len(data)))
+length = len(data)
+print('Количество элементов: ', length)
+number_of_groups = round(1 + 3.322 * np.log10(length))
 print('Количество групп: ', number_of_groups)
 interval = scope / number_of_groups
 print('Ширина интервала: ', interval)
@@ -42,7 +44,7 @@ print('Ширина интервала: ', interval)
 intervals = []
 for i in range(int(number_of_groups)):
     intervals.append((min_value + i * interval, min_value + (i + 1) * interval))
-print('Интервалы: ', intervals)
+print('Интервалы: \n', intervals)
 
 # Рассчет вектора-столбца средних значений интервалов
 mean_column = []
@@ -53,7 +55,11 @@ print('Вектор-столбец средних значений интерв�
 sample_mean = sum(data) / len(data)
 print('Выборочное среднее: ', sample_mean)
 
-median = data[len(data) // 2]
+median = 0
+if length % 2 == 0:
+    median = (data[length // 2 - 1] + data[length // 2]) / 2
+else:
+    median = data[length // 2]
 print('Медиана: ', median)
 
 sample_variance = sum([(x - sample_mean) ** 2 for x in data]) / len(data)
@@ -68,35 +74,12 @@ print('Выборочный момент третьего порядка: ', sam
 sampling_moment_4 = sum([(x - sample_mean) ** 4 for x in data]) / len(data)
 print('Выборочный момент четвертого порядка: ', sampling_moment_4)
 
-selective_kurtosis = (sampling_moment_4 / (sample_variance ** 2)) - 3
+selective_kurtosis = sampling_moment_4 / (standard_deviation ** 4) - 3
 print('Выборочный эксцесс: ', selective_kurtosis)
 
-m = len(data)
-
-# Выборочный центральный момент 2-го порядка
-sampling_central_moment_2 = sum([(x - sample_mean) ** 2 for x in data]) / m
-print('Выборочный центральный момент 2-го порядка: ', sampling_central_moment_2)
-# Выборочный центральный момент 3-го порядка
-selective_central_moment_3 = sum([(x - sample_mean) ** 3 for x in data]) / len(data)
-print('Выборочный центральный момент 3-го порядка: ', selective_central_moment_3)
-# Выборочный центральный момент 4-го порядка
-selective_central_moment_4 = sum([(x - sample_mean) ** 4 for x in data]) / len(data)
-print('Выборочный центральный момент 4-го порядка: ', selective_central_moment_4)
-
-# Оценка центрального момента 2-го порядка
-central_moment_2 = sampling_central_moment_2 * m / (m - 1)
-print('Оценка центрального момента 2-го порядка: ', central_moment_2)
-# Оценка центрального момента 3-го порядка
-central_moment_3 = selective_central_moment_3 * (m / (m - 1) / (m - 2))
-print('Оценка центрального момента 3-го порядка: ', central_moment_3)
-# Оценка центрального момента 4-го порядка
-central_moment_4 = (m * (m ** 2 - 2 * m + 3) * selective_central_moment_4 +
-                    3 * m * (2 * m - 3) * sampling_central_moment_2 ** 2) / ((m - 1) * (m - 2) * (m - 3))
-print('Оценка центрального момента 4-го порядка: ', central_moment_4)
-
 # Оценка асимметрии
-asymmetry_factor = central_moment_3 / (central_moment_2 ** (3 / 2))
-print('Асимметричность: ', asymmetry_factor)
+asymmetry = sampling_moment_3 / (standard_deviation ** 3)
+print('Асимметричность: ', asymmetry)
 
 # Отображение гистограммы
 plot_histogram(data, 'Гистограмма', 'Значения', 'Частота', number_of_groups)
